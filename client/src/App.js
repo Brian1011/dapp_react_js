@@ -106,9 +106,12 @@ function App() {
     console.log(depositValue);
   };
 
-  const handleGreetingSubmit = (e) => {
+  const handleGreetingSubmit = async (e) => {
     e.preventDefault();
-    console.log(greetingValue);
+    const greetingUpdate = await contract.setGreeting(greetingValue);
+    await greetingUpdate.wait();
+    setGreet(greetingValue);
+    setGreetingValue("");
   };
 
   return (
