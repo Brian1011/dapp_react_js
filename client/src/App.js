@@ -63,7 +63,13 @@ function App() {
   ];
 
   // The Contract object
-  const daiContract = new ethers.Contract(daiAddress, daiAbi, provider);
+  const contract = new ethers.Contract(contractAddress, ABI, signer);
+
+  // get greeting
+  const getGreeting = async () => {
+    const greeting = await contract.greet();
+    setGreet(greeting);
+  };
 
   useEffect(() => {
     const connectWallet = async () => {
@@ -83,6 +89,8 @@ function App() {
     connectWallet().catch(console.error);
 
     getBalance().catch(console.error);
+
+    getGreeting().catch(console.error);
   });
 
   const handleDepositChange = (e) => {
@@ -105,7 +113,7 @@ function App() {
 
   return (
     <div className="w-full flex flex-col justify-center mt-4 p-4">
-      <h1 className="text-3xl font-bold underline">Greeting</h1>
+      <h1 className="text-3xl font-bold underline">{greet}</h1>
       <div className="flex flex-row justify-between w-3/4 space-x-2">
         <div>Contract Balance: {balance}</div>
         <div>
