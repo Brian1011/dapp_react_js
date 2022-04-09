@@ -79,9 +79,7 @@ function App() {
 
     // get wallet balance
     const getBalance = async () => {
-      const balance = await provider.getBalance(
-        "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266"
-      );
+      const balance = await provider.getBalance(contractAddress);
       const balanceFormatted = ethers.utils.formatEther(balance);
       setBalance(balanceFormatted);
     };
@@ -101,9 +99,16 @@ function App() {
     setGreetingValue(e.target.value);
   };
 
-  const handleDepositSubmit = (e) => {
+  const handleDepositSubmit = async (e) => {
     e.preventDefault();
     console.log(depositValue);
+    const ethValue = ethers.utils.parseEther(depositValue);
+    const depositEth = await contract.deposit({ value: ethValue });
+    await depositEth.wait();
+    const balance = await provider.getBalance(contractAddress);
+    const balanceFormatted = ethers.utils.formatEther(balance);
+    setBalance(balanceFormatted);
+    setDepositValue(0);
   };
 
   const handleGreetingSubmit = async (e) => {
@@ -129,7 +134,10 @@ function App() {
                 value={depositValue}
               />
 
-              <button className="bg-blue-600 mt-2 text-white rounded-md flex justify-center">
+              <button
+                className="bg-blue-600 mt-2 text-white rounded-md flex justify-center"
+                type="submit"
+              >
                 <div className="py-2 px-2">Deposit</div>
               </button>
             </form>
@@ -144,7 +152,10 @@ function App() {
                 value={greetingValue}
               />
 
-              <button className="bg-black mt-2 text-white rounded-md flex justify-center">
+              <button
+                className="bg-black mt-2 text-white rounded-md flex justify-center"
+                type="submit"
+              >
                 <div className="py-2 px-2">Change</div>
               </button>
             </form>
