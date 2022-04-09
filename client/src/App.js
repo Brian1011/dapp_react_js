@@ -10,13 +10,17 @@ function App() {
 
   // A Web3Provider wraps a standard Web3 provider, which is
   // what MetaMask injects as window.ethereum into each page
-  const provider = new ethers.providers.Web3Provider(window.ethereum)
-  const signer = provider.getSigner()
+  const provider = new ethers.providers.Web3Provider(window.ethereum);
+  const signer = provider.getSigner();
 
-  useEffect(()=>{
-    // MetaMask requires requesting permission to connect users accounts
-    await provider.send("eth_requestAccounts", []);
-  })
+  useEffect(() => {
+    const connectWallet = async () => {
+      // MetaMask requires requesting permission to connect users accounts
+      await provider.send("eth_requestAccounts", []);
+    };
+
+    connectWallet().catch(console.error);
+  });
 
   const handleDepositChange = (e) => {
     setDepositValue(e.target.value);
