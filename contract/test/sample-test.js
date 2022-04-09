@@ -23,7 +23,7 @@ describe("Greeter", function () {
     const greeter = await Greeter.deploy("Hello, world!");
     await greeter.deployed();
 
-    await greeter.deposit({value: 10})
+    await greeter.deposit({ value: 10 });
     expect(await provider.getBalance(greeter.address)).to.equal(10);
   });
 });
